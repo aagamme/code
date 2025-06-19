@@ -4,32 +4,21 @@ import base64
 from PIL import Image
 from streamlit.components.v1 import html
 
-# Configurações iniciais
+# Configuração da página
 st.set_page_config(page_title="FCN7 - Simulador de Entrega", layout="wide")
 
-# Background fixo com imagem
-def set_background(png_file):
-    with open(png_file + ".png", "rb") as f:
-        data = f.read()
-        encoded = base64.b64encode(data).decode()
-    css = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{encoded}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
-        background-attachment: fixed;
-        overflow-x: hidden;
-    }}
-    </style>
+# Banner no topo da página
+st.markdown(
     """
-    st.markdown(css, unsafe_allow_html=True)
+    <div style="text-align: center; margin-bottom: 30px;">
+        <img src="data:image/png;base64,{}" style="width: 100%; max-height: 120px; object-fit: cover;"/>
+    </div>
+    """.format(base64.b64encode(open("Banner.png", "rb").read()).decode()),
+    unsafe_allow_html=True
+)
 
-set_background("Overview")
-
-# 🔽 Spacer menor para não cobrir o banner
-st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
+# 🔽 Espaçamento após o banner
+st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)
 
 # Carrega os dados
 @st.cache_data
@@ -106,7 +95,7 @@ for col in imagem_veiculos:
     try:
         with open(img_path, "rb") as f:
             img_b64 = base64.b64encode(f.read()).decode()
-        img_tag = f"<img src='data:image/png;base64,{img_b64}' width='120' style='margin-bottom:8px;'/>"
+        img_tag = f"<img src='data:image/png;base64,{img_b64}' width='100' style='margin-bottom:8px;'/>"
     except FileNotFoundError:
         img_tag = "<div style='height:120px; width:120px; background:#eee; border-radius:5px;'></div>"
 
