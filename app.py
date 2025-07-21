@@ -3,17 +3,16 @@ import pandas as pd
 import base64
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
-st.set_page_config(page_title="FCN7 - Simulador de Entrega", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="FCN7 - Delivery Simulator", layout="wide", initial_sidebar_state="collapsed")
 
-
-# --- FUNÇÃO SIMPLIFICADA PARA DEFINIR IMAGEM DE FUNDO ---
+# --- FUNÇÃO PARA DEFINIR FUNDO E ESTILO ---
 def set_page_background(image_file):
     try:
         with open(image_file, "rb") as f:
             img_data = f.read()
         b64_encoded = base64.b64encode(img_data).decode()
     except FileNotFoundError:
-        st.error(f"ERRO: Arquivo de imagem '{image_file}' não encontrado.")
+        st.error(f"ERROR: Image file '{image_file}' not found.")
         return
 
     style = f"""
@@ -25,12 +24,13 @@ def set_page_background(image_file):
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            height: 100vh;
             font-family: 'Montserrat', sans-serif;
             --primary-color: #001b60;
             --secondary-color: #ff7f0e;
             --text-color: #ffffff;
             --card-text-color: #333;
-            --card-background-color: rgba(255, 255, 255, 1);;
+            --card-background-color: #ffffff;
         }}
 
         .stApp > header {{
@@ -42,7 +42,8 @@ def set_page_background(image_file):
             display: none !important;
         }}
         .main .block-container {{
-             padding: 2rem !important;
+            padding: 0 !important;
+            margin-top: 0 !important;
         }}
 
         h1, h3 {{
@@ -110,13 +111,11 @@ def set_page_background(image_file):
     """
     st.markdown(style, unsafe_allow_html=True)
 
-
-
-# --- APLICA O ESTILO E O FUNDO ---
+# --- APLICA ESTILO E FUNDO ---
 set_page_background('Capa_Dashboard.png')
 
 # --- TÍTULO PRINCIPAL ---
-st.markdown("<h1>Simulador FCN7</h1>", unsafe_allow_html=True)
+st.markdown("<h1>FCN7 Simulator</h1>", unsafe_allow_html=True)
 
 # --- CARREGAMENTO DE DADOS ---
 @st.cache_data
@@ -136,22 +135,24 @@ def carregar_dados():
 
 df = carregar_dados()
 
-# --- CONTEÚDO PRINCIPAL DO APP ---
+# --- CONTEÚDO PRINCIPAL ---
 if df is None:
-    st.error("ERRO: Arquivo de dados 'Price Table_FCN7_V6.xlsx' não encontrado.")
+    st.error("ERROR: File 'Price Table_FCN7_V6.xlsx' not found.")
 else:
-    st.markdown("<h3>Selecione os Filtros</h3>", unsafe_allow_html=True)
-    
+    st.markdown("<h3>Select Filters</h3>", unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
+
     with col1:
-        pesos = ["Todos"] + sorted(df["peso_key"].dropna().unique().tolist())
-        peso = st.selectbox("Peso", pesos, label_visibility="collapsed", placeholder="Peso Estimado (Estimated Weight)")
+        weights = ["Select Estimated Weight"] + sorted(df["peso_key"].dropna().unique().tolist())
+        weight = st.selectbox("Estimated Weight", weights, index=0)
+
     with col2:
-        distancias = ["Todos"] + sorted(df["dist_key"].dropna().unique().tolist())
-        distancia = st.selectbox("Distancia", distancias, label_visibility="collapsed", placeholder="Distância (Distance)")
+        distances = ["Select Distance"] + sorted(df["dist_key"].dropna().unique().tolist())
+        distance = st.selectbox("Distance", distances, index=0)
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown("<h3>Preços por Tipo de Veículo</h3>", unsafe_allow_html=True)
+    st.markdown("<h3>Prices by Vehicle Type</h3>", unsafe_allow_html=True)
 
     imagem_veiculos = {
         "CAR": "Imagem1.png", "MID-SIZED": "Imagem2.png", "PICKUP TRUCK": "Imagem3.png",
@@ -160,14 +161,14 @@ else:
     }
 
     linha = df.copy()
-    if peso != "Todos":
-        linha = linha[linha["peso_key"] == peso]
-    if distancia != "Todos":
-        linha = linha[linha["dist_key"] == distancia]
+    if weight != "Select Estimated Weight":
+        linha = linha[linha["peso_key"] == weight]
+    if distance != "Select Distance":
+        linha = linha[linha["dist_key"] == distance]
     linha = linha.reset_index(drop=True)
 
-    if linha.empty and (peso != "Todos" or distancia != "Todos"):
-        st.warning("Nenhum resultado encontrado para os filtros selecionados.", icon="⚠️")
+    if linha.empty and (weight != "Select Estimated Weight" or distance != "Select Distance"):
+        st.warning("No results found for selected filters.", icon="⚠️")
     else:
         num_veiculos = len(imagem_veiculos)
         cols = st.columns(num_veiculos)
@@ -179,15 +180,15 @@ else:
                         img_b64 = base64.b64encode(f.read()).decode()
                     img_tag = f"<img src='data:image/png;base64,{img_b64}' style='height:70px; object-fit:contain;'/>"
                 except FileNotFoundError:
-                    img_tag = f"<div style='height:70px; width:100%; background:#eee; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;'>{img_path}<br>não encontrada</div>"
+                    img_tag = f"<div style='height:70px; width:100%; background:#eee; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;'>{img_path}<br>not found</div>"
 
-                preco_html = "<div class='price-not-available'>Selecione os filtros</div>"
+                preco_html = "<div class='price-not-available'>Select filters</div>"
                 if not linha.empty and veiculo in linha.columns:
                     try:
                         valor = float(linha.iloc[0][veiculo])
                         preco_html = f"<div class='vehicle-price'>R$ {valor:,.2f}</div>"
                     except (ValueError, TypeError):
-                        preco_html = "<div class='price-not-available'>Valor indisponível</div>"
+                        preco_html = "<div class='price-not-available'>Unavailable</div>"
 
                 nome_veiculo_formatado = veiculo.replace("_", " ").title()
 
@@ -199,5 +200,5 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 2rem;'></div>", unsafe_allow_html=True) 
-    st.markdown("<footer>Simulador FCN7 - Todos os direitos reservados</footer>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 2rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<footer>FCN7 - All rights reserved</footer>", unsafe_allow_html=True)
