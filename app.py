@@ -46,6 +46,12 @@ def set_page_background(image_file):
             margin-top: 0 !important;
         }}
 
+        main > div:first-child {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+
+
         h1, h3 {{
             color: var(--text-color) !important;
             text-align: center;
