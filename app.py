@@ -150,11 +150,11 @@ else:
 
     with col1:
         weights = ["Select Estimated Weight"] + sorted(df["peso_key"].dropna().unique().tolist())
-        weight = st.selectbox("Estimated Weight", weights, index=0)
+        weight = st.selectbox("", weights, index=0, label_visibility="collapsed")
 
     with col2:
         distances = ["Select Distance"] + sorted(df["dist_key"].dropna().unique().tolist())
-        distance = st.selectbox("Distance", distances, index=0)
+        distance = st.selectbox("", distances, index=0, label_visibility="collapsed")
 
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<h3>Prices by Vehicle Type</h3>", unsafe_allow_html=True)
