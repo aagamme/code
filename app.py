@@ -140,6 +140,15 @@ def carregar_dados():
 
 df = carregar_dados()
 
+#--Priorização
+def extrair_inicio(valor):
+    try:
+        return int(valor.split('-')[0].strip())
+    except:
+        return float('inf')  # Garante que valores inválidos vão para o final
+
+dist_keys = sorted(df["dist_key"].dropna().unique(), key=extrair_inicio)
+
 # --- CONTEÚDO PRINCIPAL ---
 if df is None:
     st.error("ERROR: File 'Price Table_FCN7_V6.xlsx' not found.")
@@ -149,12 +158,14 @@ else:
     col1, col2 = st.columns(2)
 
     with col1:
-        weights = ["Select Estimated Weight"] + sorted(df["peso_key"].dropna().unique().tolist())
-        weight = st.selectbox("", weights, index=0, label_visibility="collapsed")
+        peso_keys = sorted(df["peso_key"].dropna().unique(), key=extrair_inicio)
+        weights = ["Select Estimated Weight"] + peso_keys
+        weight = st.selectbox("Estimated Weight", weights, index=0)
 
     with col2:
-        distances = ["Select Distance"] + sorted(df["dist_key"].dropna().unique().tolist())
-        distance = st.selectbox("", distances, index=0, label_visibility="collapsed")
+        dist_keys = sorted(df["dist_key"].dropna().unique(), key=extrair_inicio)
+        distances = ["Select Distance"] + dist_keys
+        distance = st.selectbox("Distance", distances, index=0)
 
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<h3>Prices by Vehicle Type</h3>", unsafe_allow_html=True)
