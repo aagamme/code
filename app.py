@@ -19,12 +19,18 @@ def set_page_background(image_file):
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
+        html, body, .stApp {{
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100vh !important;
+            overflow-x: hidden;
+        }}
+
         .stApp {{
             background-image: url("data:image/png;base64,{b64_encoded}");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            height: 100vh;
             font-family: 'Montserrat', sans-serif;
             --primary-color: #001b60;
             --secondary-color: #ff7f0e;
@@ -33,24 +39,17 @@ def set_page_background(image_file):
             --card-background-color: #ffffff;
         }}
 
-        .stApp > header {{
-            background-color: transparent;
-        }}
-        div[data-testid="stToolbar"],
-        div[data-testid="stDecoration"],
-        div[data-testid="stStatusWidget"] {{
-            display: none !important;
-        }}
+        header, footer, .css-18ni7ap.e8zbici2 {{ display: none !important; }}
+
         .main .block-container {{
             padding: 0 !important;
-            margin-top: 0 !important;
+            margin: 0 !important;
         }}
 
-        main > div:first-child {{
-            padding-top: 0 !important;
-            margin-top: 0 !important;
+        main {{
+            padding: 0 !important;
+            margin: 0 !important;
         }}
-
 
         h1, h3 {{
             color: var(--text-color) !important;
