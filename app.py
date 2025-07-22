@@ -120,7 +120,11 @@ def set_page_background(image_file):
 set_page_background('Capa_Dashboard.png')
 
 # --- TÍTULO PRINCIPAL ---
-st.markdown("<h1>FCN7 Simulator</h1>", unsafe_allow_html=True)
+st.markdown("""
+    <div style="border: 2px solid #ccc; padding: 20px; border-radius: 10px;">
+        <h1 style="text-align: center;">Price Table</h1>
+    </div>
+""", unsafe_allow_html=True)
 
 # --- CARREGAMENTO DE DADOS ---
 @st.cache_data
