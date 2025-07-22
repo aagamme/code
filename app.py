@@ -121,9 +121,7 @@ set_page_background('Capa_Dashboard.png')
 
 # --- TÍTULO PRINCIPAL ---
 st.markdown("""
-    <div style="border: 2px solid #ccc; padding: 20px; border-radius: 10px;">
-        <h1 style="text-align: center;">Price Table</h1>
-    </div>
+    <h1 style="text-align: center; text-decoration: underline;">Price Table</h1>
 """, unsafe_allow_html=True)
 
 # --- CARREGAMENTO DE DADOS ---
