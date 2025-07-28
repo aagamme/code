@@ -4,7 +4,7 @@ import base64
 
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
-st.set_page_config(page_title="FCN7 -Price Table", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="FCN7-Price Table", layout="wide", initial_sidebar_state="collapsed")
 
 # --- FUNÇÃO PARA DEFINIR FUNDO E ESTILO ---
 def set_page_background(image_file):
