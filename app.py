@@ -6,8 +6,6 @@ import base64
 # Linha que você já tem
 st.set_page_config(page_title="FCN7 - Price Table", layout="wide", initial_sidebar_state="collapsed")
 
-# ✅ ADICIONE ESTA LINHA ABAIXO PARA O NOSSO TESTE
-st.header("TESTE DE ATUALIZAÇÃO - 20:15")
 
 # --- FUNÇÃO PARA DEFINIR FUNDO E ESTILO ---
 def set_page_background(image_file):
