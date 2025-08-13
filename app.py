@@ -206,7 +206,7 @@ else:
                 if not linha.empty and veiculo in linha.columns:
                     try:
                         valor = float(linha.iloc[0][veiculo])
-                        preco_html = f"<div class='vehicle-price'>R$ {valor:,.2f}</div>"
+                        preco_html = f"<div class='vehicle-price'> {valor:,.2f}</div>"
                     except (ValueError, TypeError):
                         preco_html = "<div class='price-not-available'>Unavailable</div>"
 
